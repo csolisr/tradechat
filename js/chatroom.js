@@ -94,8 +94,8 @@ $(document).ready(function(){
 	});
 
 	//TODO: Functionality for attachButton
-	$('#attachButton').click(function(e){
+	//$('#attachButton').click(function(e){
 		
-		return false;
-	});
+		//return false;
+	//});
 });
