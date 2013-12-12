@@ -2,7 +2,7 @@
 //TODO: chatDriver must delete the nickname after X seconds without answering
 //TODO: old files should be removed after X hours
 //TODO: lastPost becomes undefined somewhere somehow; can't pinpoint
-var lastPost = 1;
+var lastPost = "0000-00-00 00:00:00";
 
 var reloadChat = function(){
 	//  Workflow:
@@ -10,7 +10,7 @@ var reloadChat = function(){
 	//- Server receives lastPost and returns two arrays
 	//- First array contains latest lastPost
 	//- Second array contains a subarray with all posts from last update
-	$.get("http://localhost/~csolisr/web/Proyecto/php/chatDriver.php",
+	$.getJSON("http://localhost/~csolisr/web/Proyecto/php/chatDriver.php",
 	{"lastPost": lastPost},
 	function(data) {
 		//Render the received data
@@ -19,20 +19,21 @@ var reloadChat = function(){
 			for (var i=0; i<data["messageArray"].length; ++i){
 				var current = data["messageArray"][i];
 				var usr = current["usr"];
-				var time = new Date(current["time"]*1000);
+				/*var time = new Date(current["time"]*1000);
 				var content = current["content"];
 
-				var timeDisplay = time.getDate()+"/"+
-								  time.getMonth()+"/"+
-								  time.getFullYear()+" "+
+				var timeDisplay = time.getFullYear()+"-"+
+				                  time.getMonth()+"-"+
+				                  time.getDate()+" "+
 								  time.getHours()+":"+
 								  time.getMinutes()+":"+
 								  time.getSeconds();
-
+				*/
+				var timeDisplay = current["time"];
 				renderedData += "<div class='renderedData'>";
-				renderedData += "<b>"+usr+":</b>";
-				renderedData += message;
-				renderedData += "<i>(at "+timeDisplay+")</i>";
+				renderedData += "<b> "+usr+": </b>";
+				renderedData += current["content"];
+				renderedData += " <i>(at "+timeDisplay+")</i>";
 				renderedData += "</div>\n";
 				$("#chatlog").append(renderedData);
 			}
@@ -63,14 +64,17 @@ var postMsg = function(msg){
 	//The time and id parameters are obtained server-side
 	//Prepare the JSON payload
 	var payloadUsername = usr;
-	var payloadTime = new Date();
-	payloadTime.setTime(payloadTime.getTime());
+	//var payloadTime = new Date();
+	//payloadTime.setTime(payloadTime.getTime());
 	var payloadMessage = msg;
-	var JSONPayload = JSON.stringify({"username": payloadUsername,"time": payloadTime,"message": payloadMessage});
+	//var JSONPayload = JSON.stringify({"username": payloadUsername,"time": payloadTime,"message": payloadMessage});
+	//var JSONPayload = JSON.stringify({"username": payloadUsername,"message": payloadMessage});
+	var JSONPayload = {"username": payloadUsername, "message": payloadMessage};
+	//var JSONPayload = JSON.stringify([payloadUsername, payloadMessage] );
 	return JSONPayload;
 }
 
-window.setInterval(reloadChat, 3000);
+window.setInterval(reloadChat, 1000);
 //Button functions
 $(document).ready(function(){
 	//Functionality for sendButton
@@ -83,7 +87,7 @@ $(document).ready(function(){
 		JSONPayload,
 		function(data) {
 			//Clear the post
-			if (data["requestValid"]){
+			if (data["requestValid"]=="true"){
 				$("#message").val("");
 			}
 		});

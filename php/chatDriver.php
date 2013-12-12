@@ -8,6 +8,8 @@
 		$db = mysql_select_db("project") or die(mysql_error);
 
 		//TODO: Verify if this syntax is valid.
+		//TODO: Reimplement to use datetime
+		//TODO: Investigate syntax of datetime
 		$sqlQuery = "SELECT id, usr, time, content FROM messages WHERE time > '".$lastPost."'";
 		$sqlResult = mysql_query($sqlQuery, $conn) or die(mysql_error());
 		$sqlArr = array();
@@ -15,7 +17,7 @@
 		//This must return two arrays
 		//The first one contains the lastPost
 		//The second one is the series of arrays listed in order
-
+		
 		//TODO: Must somehow delete posts after time passes
 		while($row = mysql_fetch_array($sqlResult)) {
 			$sqlRow = array();
@@ -31,15 +33,15 @@
 		}
 		$sqlSuperArray = array();
 		//Calculate what's the highest (most recent) time
-		$mostRecent = 1;
+		$mostRecent = "0000-00-00 00:00:00";
 		if(!empty($sqlArr)) {
-			for($i=0,$s=count($sqlArr[$i]); $i<$s; ++$i) {
-				if ($sqlRow["time"][i] > $mostRecent){
-					$sqlRow["time"][i] = $mostRecent;
+			for($i=0,$s=count($sqlArr); $i<$s; ++$i) {
+				if ($sqlArr[$i]["time"] > $mostRecent){
+					$mostRecent = $sqlArr[$i]["time"];
 				}
 			}
 		} else {
-			$mostRecent = 1;
+			$mostRecent = $lastPost;
 		}
 		$sqlSuperArray["lastPost"] = $mostRecent;
 		$sqlSuperArray["messageArray"] = $sqlArr;

@@ -20,7 +20,7 @@ $(document).ready(function(){
 				$.getJSON("http://localhost/~csolisr/web/Proyecto/php/registerUser.php",
 				{"username":username},
 				function(data) {
-					if (data["requestValid"]){
+					if (data["requestValid"]=="true"){
 						var now = new Date();
 						now.setTime(now.getTime());
 						var expiration = 1000*60*60; //1 hour
