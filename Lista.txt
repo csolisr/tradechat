@@ -1,0 +1,59 @@
+Al entrar:
+Se verifica si el usuario existe; sino, se deja entrar y se almacena
+el usuario en una Cookie del cliente
+-Pendiente: ¿Cómo regresar al usuario a la página de Login CON UN
+MENSAJE DE ERROR si el usuario ya existe?
+-Posible respuesta: implementar la página de inicio en PHP, normal si
+el POST es nulo, con mensaje del servidor si el POST trae un mensaje
+-Posible respuesta #2: implementar una función AJAX que verifique
+antes de meterse a la página, mostrar el mensaje de error si está
+reservado, ir a la página si no.
+-Pendiente: ¿Cómo encargarse del caso en que el usuario se sale de
+la sesión y vuelve a entrar con el mismo nombre ya reservado?
+-Posible respuesta: Un Daemon revisa que, si el usuario lleva cierto
+tiempo sin hacer Ping, se desreserva el nombre.
+
+Al enviar un mensaje:
+Se envía al manejador el mensaje y el usuario que lo mandó
+Se guarda el mensaje en la base de datos
+-Pendiente: ¿Qué estructura de datos se recomienda para almacenar
+internamente los mensajes?
+-Posible respuesta: tablita SQL y un PHP para manejarlo
+
+Al enviar un archivo:
+Se envía al manejador el archivo, y el usuario que lo subió
+Se guarda el enlace en la base de datos, y el archivo por aparte,
+marcando que el mensaje es un enlace (talvez)
+-Pendiente: ¿Cómo lidiar con archivos cuyo nombre esté en conflicto con
+otro que ya se haya subido al servidor?
+-Posible respuesta: sobreescribiendo (fácil, relativamente obvio) o
+dando un nombre nuevo al archivo (más complicado)
+
+En cada Ping de actualización:
+-Pendiente: ¿Cómo usar AJAX y PHP para enviar un mensaje a todos los
+usuarios que están dentro de la sala?
+-Posible respuesta: cada cliente hace Polling cada segundo más o menos
+Enviar fecha de último elemento al servidor (¿=ID secuencial?)
+El servidor debe devolver solamente los elementos que tienen fecha
+posterior
+Los datos se despliegan en pantalla para cada usuario
+-Pendiente: ¿Cómo convierto de SQL a PHP a JSON a HTML y viceversa?
+-Posible respuesta: iteración PHP, conversor/desconversor a JSON,
+manejo del DOM
+-Pendiente: ¿Cómo mantener el estado del último elemento?
+-Posible respuesta: enviar un input[type="hidden"] con el último
+elemento, o una variable de JS
+
+Al cerrar sesión todos los usuarios:
+-Pendiente: ¿Cómo determinar que todos los usuarios cerraron sesión,
+para poder borrar la base de datos en paz?
+-Posible respuesta: Ignorarlo de momento.
+
+Repasar:
+-CSS: Overflow
+-JS: SetInterval
+
+Tablas de la BD:
+
+Usuarios: id, usr
+Mensajes: id, usr, time, content
